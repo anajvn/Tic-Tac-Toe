@@ -1,7 +1,7 @@
-import os
 import time
+import support
 
-positiondict = {
+positionDict = {
     "1": 1,
     "2": 2,
     "3": 3,
@@ -13,10 +13,10 @@ positiondict = {
     "9": 9
 }
 
-board = """ TIC TAC TOE
-| %s | %s | %s |
-| %s | %s | %s |
-| %s | %s | %s |""" % (positiondict["1"], positiondict["2"], positiondict["3"], positiondict["4"], positiondict["5"], positiondict["6"], positiondict["7"], positiondict["8"], positiondict["9"])
+players = {
+    "X": "Player 1",
+    "O": "Player 2"
+}
 
 game_on = True
 char = "X"
@@ -29,17 +29,17 @@ while game_on:
 
     while answer_not_compatible:
         # Clear screen to start only with the board updated and asking the new input
-        os.system('cls')
+        support.clear()
 
         # Print board and ask input
-        print(board + "\n")
-        position = input("Enter position of %s: " % char)
+        support.draw_board(positionDict)
+        position = input("%s turn - Enter position of %s: " % (players[char], char))
 
         # Checks if the answer is a valid position
         try:
-            positiondict[position]
+            positionDict[position]
             
-            if positiondict[position] == "X" or positiondict[position]== "O":
+            if positionDict[position] == "X" or positionDict[position]== "O":
                 raise Exception("Position already chosen.")
 
             answer_not_compatible = False
@@ -50,13 +50,19 @@ while game_on:
         
     
     # Update board
-    positiondict[position] = char
-    print(positiondict.values())
-    time.sleep(5)
+    positionDict[position] = char
+
+    # Check if it was a tie
+    if support.check_tie(positionDict):
+        support.declare_tie(positionDict)
+        game_on = False
+
+    # Check if there is a winner
+    if support.check_winner(positionDict):
+        support.declare_winner(positionDict, players[char])
+        game_on = False
+
     # Change to next player
-    if char == "X":
-        char = "O"
-    else:
-        char ="X"
+    char = support.change_player(char)
     
 
