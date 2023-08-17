@@ -1,68 +1,87 @@
-import time
 import support
 
-positionDict = {
-    "1": 1,
-    "2": 2,
-    "3": 3,
-    "4": 4,
-    "5": 5,
-    "6": 6,
-    "7": 7,
-    "8": 8,
-    "9": 9
-}
+class player(object):
+    def __init__(self, name):
+        self.name = name
+        self.score = 0
 
-players = {
-    "X": "Player 1",
-    "O": "Player 2"
-}
-
-game_on = True
-char = "X"
-
-# Starts the game, runs while there is no winning 
-while game_on:
+    def __getScore__(self):
+        return self.score
     
-    answer_not_compatible = True
-    position = ""
+    def add_score(self):
+        self.score += 1
 
-    while answer_not_compatible:
-        # Clear screen to start only with the board updated and asking the new input
-        support.clear()
+def start(player1, player2):
 
-        # Print board and ask input
-        support.draw_board(positionDict)
-        position = input("%s turn - Enter position of %s: " % (players[char], char))
+    players = {
+            "X": player(player1),
+            "O": player(player2)
+        }
+    
+    game_on = True
+    round_number = 1
+    
+    # Start the game, runs while the user doesn't quit
+    while game_on:
 
-        # Checks if the answer is a valid position
-        try:
-            positionDict[position]
+        support.start_screen(round_number, players["X"].name, players["X"].score, players["O"].name, players["O"].score)
+
+        positionDict = {
+            "1": 1,
+            "2": 2,
+            "3": 3,
+            "4": 4,
+            "5": 5,
+            "6": 6,
+            "7": 7,
+            "8": 8,
+            "9": 9
+        }
+
+        round = True
+        char = support.who_starts(players)
+
+        # Starts a round, runs while there is no winning 
+        while round:
+
+            # Get a valid position
+            position = support.get_position(players, positionDict, char)
             
-            if positionDict[position] == "X" or positionDict[position]== "O":
-                raise Exception("Position already chosen.")
+            # Update board
+            positionDict[position] = char
 
-            answer_not_compatible = False
+            # Check if it was a tie
+            if support.check_tie(positionDict):
+                support.declare_tie(positionDict)
+                round = False
+                game_on = support.keep_playing()
 
-        except:
-            print("Position not valid, choose an available number")
-            time.sleep(2)
+            # Check if there is a winner
+            if support.check_winner(positionDict):
+                support.declare_winner(positionDict, players[char].name)
+                
+                # Add a score point to the winner
+                players[char].add_score()
+
+                round = False
+                game_on = support.keep_playing()
+
+            # Change to next player
+            char = support.change_player(char)
+
+        # End of the round code
+
+        round_number += 1
         
-    
-    # Update board
-    positionDict[position] = char
+    # End of the game code
 
-    # Check if it was a tie
-    if support.check_tie(positionDict):
-        support.declare_tie(positionDict)
-        game_on = False
+    support.show_final_winner(players)
 
-    # Check if there is a winner
-    if support.check_winner(positionDict):
-        support.declare_winner(positionDict, players[char])
-        game_on = False
 
-    # Change to next player
-    char = support.change_player(char)
-    
+
+
+start("one", "two")
+
+
+        
 

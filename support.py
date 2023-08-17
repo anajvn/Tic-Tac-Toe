@@ -1,8 +1,14 @@
 import os
+import time
+from random import randint
+
+### GLOBAL METHODS
 
 # Clear screen
 def clear():
     os.system('cls')
+
+### ROUND METHODS
 
 # Draw updated board
 def draw_board(positiondict):
@@ -14,6 +20,36 @@ def draw_board(positiondict):
                        positiondict["7"], positiondict["8"], positiondict["9"])
 
     print(board + "\n")
+
+# Get valid position
+def get_position(players, positionDict, char):
+
+    answer_not_compatible = True
+    position = ""
+
+
+    while answer_not_compatible:
+        # Clear screen to start only with the board updated and asking the new input
+        clear()
+
+        # Print board and ask input
+        draw_board(positionDict)
+        position = input("%s turn - Enter position of %s: " % (players[char].name, char))
+
+        # Checks if the answer is a valid position
+        try:
+            positionDict[position]
+            
+            if positionDict[position] == "X" or positionDict[position]== "O":
+                raise Exception("Position already chosen.")
+
+            answer_not_compatible = False
+
+        except:
+            print("Position not valid, choose an available number")
+            time.sleep(2)
+    
+    return position
 
 # Change player from X to O or the opposite
 def change_player(char):
@@ -71,5 +107,48 @@ def declare_tie(positionDict):
     # Print board with the tie
     draw_board(positionDict)
     print("Round has ended. It was a tie!")
+
+# Continue playing the game
+def keep_playing():
+    answer = input("Would you like to keep playing (Y/N)? ")
+
+    if answer == "Y" or answer == "y":
+        return True
+    
+    return False
+
+### GAME METHODS
+
+def start_screen(round, name1, point1, name2, point2):
+
+    clear()
+    print("-----------\n| ROUND %s |\n-----------\n%s vs %s\n %s     %s " % (round, name1, name2, point1, point2))
+    time.sleep(3)
+
+# Define which char starts
+def who_starts(players):
+    index = randint(1, 11)
+    char = ""
+
+    if index <= 5:
+        char = "X"
+    else:
+        char = "O"
+    
+    clear()
+    print("%s will start this round..." % players[char].name)
+    time.sleep(3)
+    return char
+
+def show_final_winner(players):
+    
+    clear()
+
+    if players["X"].score > players["O"].score:
+        print("%s is the winner!" % players["X"].name)
+    else:
+        print("%s is the winner!" % players["O"].name)
+
+
 
 
