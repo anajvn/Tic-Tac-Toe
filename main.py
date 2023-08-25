@@ -76,12 +76,3 @@ def start(player1, player2):
     # End of the game code
 
     support.show_final_winner(players)
-
-
-
-
-start("one", "two")
-
-
-        
-
