@@ -14,12 +14,9 @@ def show():
         char_prompt = False, # Exclude the [Y/N] option
         )
     
-    if game_type == "Player vs Player":
+    if game_type == True:
         start("Player 1", "Player 2")
 
-    elif game_type == "Player vs Computer":
+    else:
         # escrever código para jogar com o pc
-    
-            
-    
-    
+        return

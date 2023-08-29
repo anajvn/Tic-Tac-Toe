@@ -8,46 +8,40 @@ from random import randint
 def clear():
     os.system('cls')
 
+# Timer
+def wait(seconds):
+    time.sleep(seconds)
+
 ### ROUND METHODS
 
 # Draw updated board
-def draw_board(positiondict):
-    board = """ TIC-TAC-TOE
-| %s | %s | %s |
-| %s | %s | %s |
-| %s | %s | %s |""" % (positiondict["1"], positiondict["2"], positiondict["3"], \
-                       positiondict["4"], positiondict["5"], positiondict["6"], \
-                       positiondict["7"], positiondict["8"], positiondict["9"])
-
-    print(board + "\n")
+def draw_board(board):
+    clear()
+    board.display_board()
 
 # Get valid position
-def get_position(players, positionDict, char):
+def get_position(players, board, char):
 
     answer_not_compatible = True
     position = ""
 
-
     while answer_not_compatible:
-        # Clear screen to start only with the board updated and asking the new input
-        clear()
-
         # Print board and ask input
-        draw_board(positionDict)
+        draw_board(board)
         position = input("%s turn - Enter position of %s: " % (players[char].name, char))
 
         # Checks if the answer is a valid position
         try:
-            positionDict[position]
+            board.__getPosition__(position)
             
-            if positionDict[position] == "X" or positionDict[position]== "O":
+            if board.__getPosition__(position) == "X" or board.__getPosition__(position)== "O":
                 raise Exception("Position already chosen.")
 
             answer_not_compatible = False
 
         except:
             print("Position not valid, choose an available number")
-            time.sleep(2)
+            wait(2)
     
     return position
 
@@ -61,37 +55,34 @@ def change_player(char):
     return char
 
 # Check winners
-def check_winner(positiondict):
+def check_winner(board):
     """ Possible combinations:
     1 - 2 - 3 | 4 - 5 - 6 | 7 - 8 - 9
     1 - 4 - 7 | 2 - 5 - 8 | 3 - 6 - 9
     1 - 5 - 9 | 3 - 5 - 7
     """
 
-    if (positiondict["1"] == positiondict["2"] == positiondict["3"]) \
-    or (positiondict["4"] == positiondict["5"] == positiondict["6"]) \
-    or (positiondict["7"] == positiondict["8"] == positiondict["9"]) \
-    or (positiondict["1"] == positiondict["4"] == positiondict["7"]) \
-    or (positiondict["2"] == positiondict["5"] == positiondict["8"]) \
-    or (positiondict["3"] == positiondict["6"] == positiondict["9"]) \
-    or (positiondict["1"] == positiondict["5"] == positiondict["9"]) \
-    or (positiondict["3"] == positiondict["5"] == positiondict["7"]):
+    if (board.__getPosition__("1") == board.__getPosition__("2") == board.__getPosition__("3")) \
+    or (board.__getPosition__("4") == board.__getPosition__("5") == board.__getPosition__("6")) \
+    or (board.__getPosition__("7") == board.__getPosition__("8") == board.__getPosition__("9")) \
+    or (board.__getPosition__("1") == board.__getPosition__("4") == board.__getPosition__("7")) \
+    or (board.__getPosition__("2") == board.__getPosition__("5") == board.__getPosition__("8")) \
+    or (board.__getPosition__("3") == board.__getPosition__("6") == board.__getPosition__("9")) \
+    or (board.__getPosition__("1") == board.__getPosition__("5") == board.__getPosition__("9")) \
+    or (board.__getPosition__("3") == board.__getPosition__("5") == board.__getPosition__("7")):
         return True
     else:
         return False
     
 # Declare the winner with the updated board
-def declare_winner(positionDict, winner):
-    # Clear screen to start only with the board updated
-    clear()
-
+def declare_winner(board, winner):
     # Print board with the victory
-    draw_board(positionDict)
+    draw_board(board)
     print("Yay! %s won the game!" % winner)
 
 # Check if the board is complete and it was a tie
-def check_tie(positiondict):
-    values = positiondict.values()
+def check_tie(board):
+    values = board.__getValues__()
     count = 0 
     for value in values:
         if value == "X" or value == "O":
@@ -100,50 +91,36 @@ def check_tie(positiondict):
     return count == 9
 
 # Declare a tie with the updated board
-def declare_tie(positionDict):
-    # Clear screen to start only with the board updated
-    clear()
-
+def declare_tie(board):
     # Print board with the tie
-    draw_board(positionDict)
+    draw_board(board)
     print("Round has ended. It was a tie!")
 
 # Continue playing the game
 def keep_playing():
-    answer = input("Would you like to keep playing (Y/N)? ")
+    answer = input("Would you like to keep playing (Y/N)? ").lower()
 
-    if answer == "Y" or answer == "y":
+    if answer == "y" or answer == "yes":
         return True
     
     return False
 
-### GAME METHODS
-
-def start_screen(round, name1, point1, name2, point2):
-
-    clear()
-    print("-----------\n| ROUND %s |\n-----------\n%s vs %s\n %s     %s " % (round, name1, name2, point1, point2))
-    time.sleep(3)
+### GAME METHODS    
 
 # Define which char starts
-def who_starts(players):
-    index = randint(1, 11)
+def random_player():
+    index = randint(1, 2)
     char = ""
 
-    if index <= 5:
+    if index == 1:
         char = "X"
     else:
         char = "O"
     
-    clear()
-    print("%s will start this round..." % players[char].name)
-    time.sleep(3)
     return char
 
 def show_final_winner(players):
-    
     clear()
-
     if players["X"].score > players["O"].score:
         print("%s is the winner!" % players["X"].name)
     else:

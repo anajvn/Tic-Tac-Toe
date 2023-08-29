@@ -1,22 +1,9 @@
 import support
-
-class player(object):
-    def __init__(self, name):
-        self.name = name
-        self.score = 0
-
-    def __getScore__(self):
-        return self.score
-    
-    def add_score(self):
-        self.score += 1
+import use_cases
 
 def start(player1, player2):
 
-    players = {
-            "X": player(player1),
-            "O": player(player2)
-        }
+    players = use_cases.create_players(player1, player2)
     
     game_on = True
     round_number = 1
@@ -24,53 +11,28 @@ def start(player1, player2):
     # Start the game, runs while the user doesn't quit
     while game_on:
 
-        support.start_screen(round_number, players["X"].name, players["X"].score, players["O"].name, players["O"].score)
+        # use_cases.start_round(round_number, players)
+        board = use_cases.create_board()
 
-        positionDict = {
-            "1": 1,
-            "2": 2,
-            "3": 3,
-            "4": 4,
-            "5": 5,
-            "6": 6,
-            "7": 7,
-            "8": 8,
-            "9": 9
-        }
 
         round = True
-        char = support.who_starts(players)
+        char = use_cases.initiator(players)
 
         # Starts a round, runs while there is no winning 
         while round:
 
-            # Get a valid position
-            position = support.get_position(players, positionDict, char)
-            
-            # Update board
-            positionDict[position] = char
+            # Get user input and update the board
+            use_cases.user_input(board, players, char)
 
-            # Check if it was a tie
-            if support.check_tie(positionDict):
-                support.declare_tie(positionDict)
-                round = False
-                game_on = support.keep_playing()
-
-            # Check if there is a winner
-            if support.check_winner(positionDict):
-                support.declare_winner(positionDict, players[char].name)
-                
-                # Add a score point to the winner
-                players[char].add_score()
-
-                round = False
+            # Check for a tie or victory and returns if the round is over
+            round = use_cases.victory_or_tie(board, players, char)
+            if not round:
                 game_on = support.keep_playing()
 
             # Change to next player
             char = support.change_player(char)
 
         # End of the round code
-
         round_number += 1
         
     # End of the game code
