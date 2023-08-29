@@ -1,4 +1,3 @@
-import support
 import use_cases
 
 def start(player1, player2):
@@ -27,14 +26,14 @@ def start(player1, player2):
             # Check for a tie or victory and returns if the round is over
             round = use_cases.victory_or_tie(board, players, char)
             if not round:
-                game_on = support.keep_playing()
+                game_on = use_cases.keep_playing()
 
             # Change to next player
-            char = support.change_player(char)
+            char = use_cases.change_player(char)
 
         # End of the round code
         round_number += 1
         
     # End of the game code
 
-    support.show_final_winner(players)
+    use_cases.show_final_winner(players)

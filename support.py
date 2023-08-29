@@ -45,15 +45,6 @@ def get_position(players, board, char):
     
     return position
 
-# Change player from X to O or the opposite
-def change_player(char):
-    if char == "X":
-        char = "O"
-    else:
-        char ="X"
-    
-    return char
-
 # Check winners
 def check_winner(board):
     """ Possible combinations:
@@ -96,15 +87,6 @@ def declare_tie(board):
     draw_board(board)
     print("Round has ended. It was a tie!")
 
-# Continue playing the game
-def keep_playing():
-    answer = input("Would you like to keep playing (Y/N)? ").lower()
-
-    if answer == "y" or answer == "yes":
-        return True
-    
-    return False
-
 ### GAME METHODS    
 
 # Define which char starts
@@ -118,14 +100,3 @@ def random_player():
         char = "O"
     
     return char
-
-def show_final_winner(players):
-    clear()
-    if players["X"].score > players["O"].score:
-        print("%s is the winner!" % players["X"].name)
-    else:
-        print("%s is the winner!" % players["O"].name)
-
-
-
-

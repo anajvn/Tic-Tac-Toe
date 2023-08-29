@@ -54,3 +54,29 @@ def victory_or_tie(board, players, char):
         return False
     
     return True
+
+# Continue playing the game
+def keep_playing():
+    answer = input("Would you like to keep playing (Y/N)? ").lower()
+
+    if answer == "y" or answer == "yes":
+        return True
+    
+    return False
+
+# Change player from X to O or the opposite
+def change_player(char):
+    if char == "X":
+        char = "O"
+    else:
+        char ="X"
+    
+    return char
+
+# Show the winner based on the score
+def show_final_winner(players):
+    support.clear()
+    if players["X"].score > players["O"].score:
+        print("%s is the winner!" % players["X"].name)
+    else:
+        print("%s is the winner!" % players["O"].name)
