@@ -18,5 +18,4 @@ def show():
         start("Player 1", "Player 2")
 
     else:
-        # escrever código para jogar com o pc
-        return
+        start("Player 1", "Computer")

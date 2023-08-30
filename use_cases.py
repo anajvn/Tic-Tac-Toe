@@ -12,14 +12,16 @@ def create_board():
 def start_round(round, players):
     support.clear()
     print("""
-      -----------\n
-      | ROUND %s |\n
-      -----------\n
-%s - %s vs %s - %s\n""" 
+    -----------\n
+    | ROUND %s |\n
+    -----------\n
+     %s - %s 
+        vs 
+     %s - %s\n""" 
           % (round, players["X"].name, players["X"].score, players["O"].name, players["O"].score))
     support.wait(3)
 
-# Defines the player that will starts
+# Defines the player that will starts when playing a 2-player-game
 def initiator(players):
     support.clear()
     player = support.random_player()
@@ -35,7 +37,7 @@ def user_input(board, players, char):
     position = support.get_position(players, board, char)
     
     # Update board
-    board.change_position(position, char)
+    support.update_board(board, position, char)
 
 # Verifies if there is a tie or a victory
 def victory_or_tie(board, players, char):
@@ -78,5 +80,13 @@ def show_final_winner(players):
     support.clear()
     if players["X"].score > players["O"].score:
         print("%s is the winner!" % players["X"].name)
-    else:
+    elif players["X"].score < players["O"].score:
         print("%s is the winner!" % players["O"].name)
+    else:
+        print("It was a tie!")
+
+### COMPUTER TURN
+
+def play_round_auto(board, char):
+    position = support.computer_turn(board)
+    support.update_board(board, position, char)

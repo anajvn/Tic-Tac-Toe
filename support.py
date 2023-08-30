@@ -32,10 +32,8 @@ def get_position(players, board, char):
 
         # Checks if the answer is a valid position
         try:
-            board.__getPosition__(position)
-            
-            if board.__getPosition__(position) == "X" or board.__getPosition__(position)== "O":
-                raise Exception("Position already chosen.")
+            if not check_availability(board, position): 
+                raise Exception("Position already chosen or not existent.")
 
             answer_not_compatible = False
 
@@ -44,6 +42,22 @@ def get_position(players, board, char):
             wait(2)
     
     return position
+
+# Update board
+def update_board(board, position, value):
+    board.change_position(position, value)
+
+# Check position availability
+def check_availability(board,position):
+    try:
+        board.__getPosition__(position)
+
+        if board.__getPosition__(position) == "X" or board.__getPosition__(position)== "O":
+            return False
+        
+        return True
+    except:
+        return False
 
 # Check winners
 def check_winner(board):
@@ -100,3 +114,29 @@ def random_player():
         char = "O"
     
     return char
+
+# Choose a random position - Computer turn
+def choose_position():
+    return randint(1, 9)
+    
+# Computer turn
+def computer_turn(board):
+
+    answer_not_compatible = True
+    position = ""
+    draw_board(board)
+
+    while answer_not_compatible:
+        # Print board and get computer input
+        position = str(choose_position())
+        # Checks if the answer is a valid position
+        if check_availability(board, position):
+            answer_not_compatible = False
+            
+    
+    print("Computer turn...")
+    wait(1)
+    print("The chosen position is " + position)
+    wait(2)    
+    
+    return position

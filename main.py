@@ -10,27 +10,34 @@ def start(player1, player2):
     # Start the game, runs while the user doesn't quit
     while game_on:
 
-        # use_cases.start_round(round_number, players)
+        use_cases.start_round(round_number, players)
         board = use_cases.create_board()
-
-
         round = True
         char = use_cases.initiator(players)
-
+            
         # Starts a round, runs while there is no winning 
         while round:
 
-            # Get user input and update the board
-            use_cases.user_input(board, players, char)
+            if  player2 == "Computer" and char == "X":
+                # Get user input and update the board
+                use_cases.user_input(board, players, char)
 
-            # Check for a tie or victory and returns if the round is over
-            round = use_cases.victory_or_tie(board, players, char)
-            if not round:
-                game_on = use_cases.keep_playing()
+                # Check for a tie or victory and returns if the round is over
+                round = use_cases.victory_or_tie(board, players, char)
+                if not round:
+                    game_on = use_cases.keep_playing()
+                    continue
+                char = use_cases.change_player(char)
 
-            # Change to next player
-            char = use_cases.change_player(char)
-
+            # Call computer turn
+            if player2 == "Computer":
+                use_cases.play_round_auto(board, char)
+                # Check for a tie or victory and returns if the round is over
+                round = use_cases.victory_or_tie(board, players, char)
+                if not round:
+                    game_on = use_cases.keep_playing()
+                char = use_cases.change_player(char)
+                
         # End of the round code
         round_number += 1
         
