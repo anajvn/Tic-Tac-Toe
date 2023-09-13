@@ -18,7 +18,7 @@ def start(player1, player2):
         # Starts a round, runs while there is no winning 
         while round:
 
-            if  player2 == "Computer" and char == "X":
+            if  (player2 == "Computer" and char == "X") or (player2 == "Player 2"):
                 # Get user input and update the board
                 use_cases.user_input(board, players, char)
 
