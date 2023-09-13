@@ -8,8 +8,8 @@ Tic-Tac-Toe is a two-player game where the objective is to be the first to get t
 Here's how the game works:
 
 1. Run the Python script in your preferred Python environment.
-2. Choose if you are playing against another player or aginst the computer.
-3. Players will take turns entering the row and column where they want to place their symbol.
+2. Choose if you are playing against another player or against the computer.
+3. Players will take turns entering the position where they want to place their symbol.
 4. The game will display the updated board after each move.
 5. The game continues until a player wins or the board is full (resulting in a draw).
 
@@ -31,7 +31,7 @@ python tic_tac_toe.py
 This project is a great opportunity to practice and learn various aspects of Python programming, including:
 
 * **Basic Syntax:** Understand the fundamentals of Python syntax, such as variable declarations, conditionals, loops, and functions.
-* **Data Structures:** Utilize lists or arrays to represent the game board and track player moves.
+* **Data Structures:** Utilize a dictionary to represent the game board.
 * **User Input:** Learn how to capture user input and use it to drive the game's logic.
 * **Error Handling:** Implement error handling to deal with invalid inputs gracefully and improve the user experience.
 
